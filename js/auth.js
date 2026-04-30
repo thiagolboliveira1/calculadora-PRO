@@ -42,8 +42,18 @@ async function register() {
   const email = emailEl().value;
   const senha = senhaEl().value;
 
-  await createUserWithEmailAndPassword(auth, email, senha);
-  alert("Conta criada!");
+  try {
+    await createUserWithEmailAndPassword(auth, email, senha);
+    alert("Conta criada!");
+  } catch (e) {
+    if (e.code === "auth/email-already-in-use") {
+      alert("Esse email já está cadastrado.");
+    } else if (e.code === "auth/weak-password") {
+      alert("Senha muito fraca (mínimo 6 caracteres).");
+    } else {
+      alert("Erro: " + e.message);
+    }
+  }
 }
 
 // GOOGLE
