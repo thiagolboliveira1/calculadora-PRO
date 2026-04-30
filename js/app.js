@@ -1,4 +1,3 @@
-
 let tipo = "motorista";
 
 // ================= MODE =================
@@ -41,13 +40,9 @@ function calcularMotorista() {
     let consumo = +document.getElementById('consumo').value || 10;
     let gasolina = +document.getElementById('gasolina').value || 7;
 
-    
-let manut = +document.getElementById('manut').value || 0;
-let mei = +document.getElementById('mei').value || 0;
-let extra = +document.getElementById('extra').value || 0;
-
-let custoFixoTotal = manut + mei + extra;
-let custoFixoPorCorrida = custoFixoTotal * 0.05;
+    let manut = +document.getElementById('manut').value || 0;
+    let mei = +document.getElementById('mei').value || 0;
+    let extra = +document.getElementById('extra').value || 0;
 
     if (km === 0 || valor === 0) {
         alert("Preencha KM e valor da corrida");
@@ -67,6 +62,18 @@ let custoFixoPorCorrida = custoFixoTotal * 0.05;
     else if (valorKm < 2.00) status = "✅ BOA";
     else status = "🔥 EXCELENTE";
 
+    // 🔥 ALERTA MOTORISTA
+    let alertaClass = lucro < 0 ? "ruim" : (lucro < 10 ? "cuidado" : "ok");
+
+    let alertaTexto = "";
+    if (lucro < 0) {
+        alertaTexto = "❌ PREJUÍZO — NÃO COMPENSA";
+    } else if (lucro < 10) {
+        alertaTexto = "⚠️ LUCRO BAIXO — CUIDADO";
+    } else {
+        alertaTexto = "✅ CORRIDA OK";
+    }
+
     salvarHistorico("motorista", km, valor, lucro);
 
     document.getElementById("resultado").innerHTML = `
@@ -81,13 +88,15 @@ let custoFixoPorCorrida = custoFixoTotal * 0.05;
 
         💵 Lucro: <b>R$ ${lucro.toFixed(2)}</b><br><br>
 
-        ⚠️ ${status}
+        ⚠️ ${status}<br><br>
+
+        <div class="alert ${alertaClass}">
+            ${alertaTexto}
+        </div>
     `;
 }
 
 // ================= ENTREGADOR =================
-
-
 function calcularEntregador() {
 
     let km = +document.getElementById('km').value || 0;
@@ -106,16 +115,25 @@ function calcularEntregador() {
 
     let valorKm = valor / km;
 
-    // combustível
     let litros = km / consumo;
     let custoGasolina = litros * gasolina;
 
-    // custos fixos (mesmo do motorista, mas diluídos)
     let custoFixoTotal = manut + mei + extra;
-    let custoFixoPorCorrida = custoFixoTotal * 0.03; // menor impacto no entregador
+    let custoFixoPorCorrida = custoFixoTotal * 0.03;
 
-    // lucro real
     let lucroLiquido = valor - custoGasolina - custoFixoPorCorrida;
+
+    // 🔥 ALERTA ENTREGADOR
+    let alertaClass = lucroLiquido < 0 ? "ruim" : (lucroLiquido < 10 ? "cuidado" : "ok");
+
+    let alertaTexto = "";
+    if (lucroLiquido < 0) {
+        alertaTexto = "❌ PREJUÍZO — NÃO COMPENSA";
+    } else if (lucroLiquido < 10) {
+        alertaTexto = "⚠️ LUCRO BAIXO";
+    } else {
+        alertaTexto = "✅ VALE A PENA";
+    }
 
     salvarHistorico("entregador", km, valor, lucroLiquido);
 
@@ -129,9 +147,14 @@ function calcularEntregador() {
 ⛽ Combustível: R$ ${custoGasolina.toFixed(2)}<br>
 📊 Custos fixos: R$ ${custoFixoPorCorrida.toFixed(2)}<br><br>
 
-💵 Lucro: R$ ${lucroLiquido.toFixed(2)}
+💵 Lucro: R$ ${lucroLiquido.toFixed(2)}<br><br>
+
+<div class="alert ${alertaClass}">
+    ${alertaTexto}
+</div>
 `;
 }
+
 // ================= HISTÓRICO =================
 function salvarHistorico(tipo, km, valor, lucro) {
 
@@ -148,7 +171,7 @@ function salvarHistorico(tipo, km, valor, lucro) {
     localStorage.setItem("historico", JSON.stringify(dados));
 }
 
-// ================= VER HISTÓRICO =================
+// ================= HISTÓRICO =================
 window.verHistorico = function () {
 
     let dados = JSON.parse(localStorage.getItem("historico")) || [];
@@ -170,7 +193,7 @@ window.verHistorico = function () {
     document.getElementById("resumo").innerHTML = html;
 };
 
-// ================= SALVAR BOTÃO =================
+// ================= SALVAR =================
 window.salvar = function () {
     verHistorico();
 };
