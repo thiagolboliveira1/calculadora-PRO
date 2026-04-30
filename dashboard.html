@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>🚗 Calculadora PRO</header>
+
+<div class="container">
+
+<div class="card">
+<select id="tipo">
+<option value="entregador">Entregador</option>
+<option value="motorista">Motorista</option>
+</select>
+</div>
+
+<div class="card">
+<input type="number" id="km" placeholder="KM total">
+<input type="number" id="valor" placeholder="Valor R$">
+<input type="number" id="consumo" placeholder="Km/L">
+<input type="number" id="gasolina" placeholder="Gasolina">
+</div>
+
+<div class="card">
+<input type="number" id="manut" value="10">
+<input type="number" id="mei" value="5">
+<input type="number" id="extra" value="0">
+</div>
+
+<button onclick="calcular()">Calcular</button>
+<button onclick="salvar()">Salvar</button>
+
+<div class="card" id="resultado"></div>
+<div class="card" id="resumo"></div>
+
+</div>
+
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>
