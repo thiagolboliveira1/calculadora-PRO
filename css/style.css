@@ -9,6 +9,7 @@ body {
   color: white;
 }
 
+
 /* CARD PRINCIPAL */
 .login-box {
   width: 90%;
@@ -93,4 +94,25 @@ button:nth-of-type(3) {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.logout-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  opacity: 1;
+  transform: scale(1.05);
 }
