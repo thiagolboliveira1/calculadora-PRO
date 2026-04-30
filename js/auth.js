@@ -5,45 +5,59 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithRedirect
+  signInWithPopup,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 const auth = getAuth(app);
 
+// ===== ELEMENTOS =====
 const emailEl = () => document.getElementById("email");
 const senhaEl = () => document.getElementById("senha");
 
-// REGISTER REAL
+// ===== LOGIN =====
+window.login = async () => {
+  const email = emailEl().value;
+  const senha = senhaEl().value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, senha);
+    window.location.href = "dashboard.html";
+  } catch (e) {
+    alert("Erro login: " + e.message);
+  }
+};
+
+// ===== CADASTRO =====
 window.register = async () => {
-  let email = emailEl().value;
-  let senha = senhaEl().value;
+  const email = emailEl().value;
+  const senha = senhaEl().value;
 
   try {
     await createUserWithEmailAndPassword(auth, email, senha);
-    alert("Conta criada!");
+    alert("Conta criada com sucesso!");
+    window.location.href = "dashboard.html";
   } catch (e) {
-    if (e.code === "auth/email-already-in-use") {
-      alert("Esse e-mail já está cadastrado.");
-    } else if (e.code === "auth/weak-password") {
-      alert("Senha precisa ter pelo menos 6 caracteres.");
-    } else {
-      alert("Erro: " + e.message);
-    }
+    alert("Erro cadastro: " + e.message);
   }
 };
-  let email = emailEl().value;
-  let senha = senhaEl().value;
 
+// ===== GOOGLE LOGIN =====
+window.googleLogin = async () => {
   try {
-    await createUserWithEmailAndPassword(auth, email, senha);
-    alert("Conta criada!");
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    window.location.href = "dashboard.html";
   } catch (e) {
-    alert(e.message);
+    alert("Erro Google: " + e.message);
   }
 };
 
-// TESTE LOGIN (temporário)
-window.login = () => alert("login funcionando");
+// ===== PROTEÇÃO DE TELA =====
+onAuthStateChanged(auth, (user) => {
+  const isLoginPage = window.location.pathname.includes("index.html");
 
-// TESTE GOOGLE (temporário)
-window.googleLogin = () => alert("google funcionando");
+  if (!user && !isLoginPage) {
+    window.location.href = "index.html";
+  }
+});
