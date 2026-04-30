@@ -4,44 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard</title>
+
 <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
 <button class="logout-btn" onclick="logout()">Sair</button>
-<header>🚗 Calculadora PRO </header>
+
+<header>🚗 Calculadora PRO</header>
 
 <div class="container">
 
-<div class="card">
-<select id="tipo">
-<option value="entregador">Entregador</option>
-<option value="motorista">Motorista</option>
-</select>
+    <!-- TOGGLE UBER STYLE -->
+    <div class="mode-toggle">
+        <button id="btnMotorista" class="active" onclick="setMode('motorista')">
+            🚗 Motorista
+        </button>
+
+        <button id="btnEntregador" onclick="setMode('entregador')">
+            📦 Entregador
+        </button>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="card">
+    <h4>🚗 Corrida (decisão rápida)</h4>
+
+    <input type="number" id="km" placeholder="KM total da corrida">
+    <input type="number" id="valor" placeholder="Valor da corrida (R$)">
 </div>
 
 <div class="card">
-<input type="number" id="km" placeholder="KM total">
-<input type="number" id="valor" placeholder="Valor R$">
-<input type="number" id="consumo" placeholder="Km/L">
-<input type="number" id="gasolina" placeholder="Gasolina">
+    <h4>⛽ Custos do veículo</h4>
+
+    <input type="number" id="consumo" placeholder="Km por litro (ex: 10)">
+    <input type="number" id="gasolina" placeholder="Preço da gasolina (ex: 7.19)">
 </div>
 
 <div class="card">
-<input type="number" id="manut" value="10">
-<input type="number" id="mei" value="5">
-<input type="number" id="extra" value="0">
+    <h4>📊 Taxas (mensal / opcional)</h4>
+
+    <input type="number" id="manut" placeholder="Manutenção mensal (R$)">
+    <input type="number" id="mei" placeholder="MEI / impostos (R$)">
+    <input type="number" id="extra" placeholder="Outros custos (R$)">
 </div>
 
-<button onclick="calcular()">Calcular</button>
-<button onclick="salvar()">Salvar</button>
+    <button onclick="calcular()">Calcular</button>
+    <button onclick="salvar()">Salvar</button>
 
-<div class="card" id="resultado"></div>
-<div class="card" id="resumo"></div>
+    <div class="card" id="resultado"></div>
+    <div class="card" id="resumo"></div>
 
 </div>
 
-<script type="module" src="js/app.js"></script>
 <script type="module" src="js/auth.js"></script>
+<script type="module" src="js/app.js"></script>
+
 </body>
 </html>

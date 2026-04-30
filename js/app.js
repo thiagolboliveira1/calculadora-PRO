@@ -1,75 +1,101 @@
-import { app } from "./firebase.js";
 
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+let tipo = "motorista";
 
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+// ===== TOGGLE MODE =====
+window.setMode = function(mode) {
+    tipo = mode;
 
-const db = getFirestore(app);
-const auth = getAuth(app);
+    document.getElementById("btnMotorista").classList.remove("active");
+    document.getElementById("btnEntregador").classList.remove("active");
 
-let ultima = null;
-
-// CALCULAR
-window.calcular = () => {
-
-    let km = val("km");
-    let valor = val("valor");
-    let consumo = val("consumo");
-    let gasolina = val("gasolina");
-
-    let manut = val("manut");
-    let mei = val("mei");
-    let extra = val("extra");
-
-    let custo = (km / consumo) * gasolina;
-    let lucro = valor - custo;
-
-    let lFinal = lucro
-        - lucro * (manut/100)
-        - lucro * (mei/100)
-        - lucro * (extra/100);
-
-    ultima = { valor, custo, lucroFinal: lFinal, data: new Date().toISOString() };
-
-    el("resultado").innerHTML =
-        "Lucro final: R$ " + lFinal.toFixed(2);
+    if (mode === "motorista") {
+        document.getElementById("btnMotorista").classList.add("active");
+    } else {
+        document.getElementById("btnEntregador").classList.add("active");
+    }
 };
 
-// SALVAR
-window.salvar = async () => {
+// ===== BOTÃO CALCULAR =====
+window.calcular = function () {
 
-    if (!ultima) return alert("Calcule antes");
-
-    await addDoc(collection(db, "corridas"), {
-        uid: auth.currentUser?.uid,
-        ...ultima
-    });
-
-    resumo();
+    if (tipo === "motorista") {
+        calcularMotorista();
+    } else {
+        calcularEntregador();
+    }
 };
 
-// RESUMO
-async function resumo() {
+// ===== MOTORISTA =====
+function calcularMotorista() {
 
-    let snap = await getDocs(collection(db, "corridas"));
-    let total = 0;
+    let km = parseFloat(document.getElementById('km').value) || 0;
+    let valor = parseFloat(document.getElementById('valor').value) || 0;
 
-    snap.forEach(doc => {
-        let d = doc.data();
-        total += d.lucroFinal;
-    });
+    let consumo = parseFloat(document.getElementById('consumo').value) || 10;
+    let gasolina = parseFloat(document.getElementById('gasolina').value) || 7;
 
-    el("resumo").innerText = "Mês: R$ " + total.toFixed(2);
+    let manut = parseFloat(document.getElementById('manut').value) || 0;
+    let mei = parseFloat(document.getElementById('mei').value) || 0;
+    let extra = parseFloat(document.getElementById('extra').value) || 0;
+
+    // ===== CORRIDA =====
+    let valorKm = km ? (valor / km) : 0;
+
+    let litros = km / consumo;
+    let custoCombustivel = litros * gasolina;
+
+    // ===== CUSTO FIXO MENSAL (explicado) =====
+    let custoMensal = manut + mei + extra;
+
+    // dilui custo por corrida (simulação simples)
+    let custoPorCorrida = custoMensal * 0.05;
+
+    let lucro = valor - custoCombustivel - custoPorCorrida;
+
+    // ===== STATUS =====
+    let status = "";
+
+    if (valorKm < 1.30) status = "❌ RUIM (não compensa)";
+    else if (valorKm < 1.70) status = "⚠️ ATENÇÃO";
+    else if (valorKm < 2.00) status = "✅ BOA";
+    else status = "🔥 EXCELENTE";
+
+    document.getElementById("resultado").innerHTML = `
+        🚗 <b>ANÁLISE DA CORRIDA</b><br><br>
+
+        📍 KM total: ${km} km<br>
+        💰 Valor/km: R$ ${valorKm.toFixed(2)}<br><br>
+
+        ⛽ Combustível: R$ ${custoCombustivel.toFixed(2)}<br>
+        📊 Custo operacional (estimado): R$ ${custoPorCorrida.toFixed(2)}<br><br>
+
+        💵 Lucro real estimado: <b>R$ ${lucro.toFixed(2)}</b><br><br>
+
+        ⚠️ Status: <b>${status}</b><br><br>
+
+        <small>
+        ℹ️ Custos mensais são diluídos automaticamente para simular impacto por corrida.
+        </small>
+    `;
 }
 
-// helpers
-const val = id => parseFloat(el(id).value) || 0;
-const el = id => document.getElementById(id);
+// ===== ENTREGADOR =====
+function calcularEntregador() {
 
-// init
-resumo();
+    let km = parseFloat(document.getElementById('km').value) || 0;
+    let valor = parseFloat(document.getElementById('valor').value) || 0;
+
+    let valorKm = km ? (valor / km) : 0;
+
+    document.getElementById("resultado").innerHTML = `
+        📦 MODO ENTREGADOR<br><br>
+        📍 KM: ${km}<br>
+        💰 Valor/km: R$ ${valorKm.toFixed(2)}<br>
+        ⚡ Simples e direto
+    `;
+}
+
+// ===== SALVAR (placeholder) =====
+window.salvar = function () {
+    alert("Função salvar em desenvolvimento");
+};
