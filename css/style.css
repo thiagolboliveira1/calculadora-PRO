@@ -132,3 +132,19 @@ button {
 .cuidado { color: #facc15; }
 .ruim { color: #ef4444; }
 .excelente { color: #38bdf8; }
+
+
+/* MODO ENTREGADOR */
+body.entregador {
+    background: linear-gradient(135deg, #111827, #0b0f17);
+}
+
+body.entregador header {
+    background: #1f2937;
+    color: #38bdf8;
+}
+
+/* muda cor do botão no entregador */
+body.entregador button {
+    background: #38bdf8;
+}
