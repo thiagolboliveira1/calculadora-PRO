@@ -1,5 +1,3 @@
-console.log("AUTH CARREGADO");
-
 import { app } from "./firebase.js";
 
 import {
@@ -43,13 +41,13 @@ async function register() {
   }
 }
 
-// ===== GOOGLE LOGIN =====
+// ===== GOOGLE =====
 async function googleLogin() {
   const provider = new GoogleAuthProvider();
   await signInWithRedirect(auth, provider);
 }
 
-// ===== RETORNO DO GOOGLE =====
+// ===== RETORNO GOOGLE =====
 getRedirectResult(auth)
   .then((result) => {
     if (result) {
@@ -61,7 +59,7 @@ getRedirectResult(auth)
     alert("Erro no login com Google");
   });
 
-// ===== EXPOR PARA HTML =====
+// ===== EXPOR PARA HTML (CRÍTICO) =====
 window.login = login;
 window.register = register;
 window.googleLogin = googleLogin;
