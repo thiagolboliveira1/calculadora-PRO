@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
+  background: radial-gradient(circle at top, #1e293b, #0f172a);
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -9,76 +9,88 @@ body {
   color: white;
 }
 
-/* LOGIN BOX */
+/* CARD PRINCIPAL */
 .login-box {
   width: 90%;
   max-width: 380px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  padding: 30px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
   text-align: center;
-  animation: fade 0.5s ease;
+  animation: pop 0.4s ease;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* TITLE */
+/* TÍTULO */
 .login-box h1 {
-  margin-bottom: 20px;
   font-size: 22px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
 }
 
 /* INPUTS */
 input {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin: 8px 0;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   outline: none;
-  background: #1e293b;
+  background: #0f172a;
   color: white;
+  transition: 0.2s;
+  border: 1px solid transparent;
 }
 
-/* BUTTONS */
+input:focus {
+  border: 1px solid #38bdf8;
+  transform: scale(1.02);
+}
+
+/* BOTÕES */
 button {
   width: 100%;
-  padding: 12px;
+  padding: 13px;
   margin-top: 10px;
   border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  border-radius: 12px;
   font-weight: bold;
+  cursor: pointer;
   transition: 0.2s;
 }
 
 button:hover {
-  transform: scale(1.03);
+  transform: translateY(-2px);
 }
 
+/* LOGIN */
 button:nth-of-type(1) {
-  background: #22c55e;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
 }
 
+/* CADASTRO */
 button:nth-of-type(2) {
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
 }
 
+/* GOOGLE */
 button:nth-of-type(3) {
-  background: #ef4444;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
 }
 
-/* ANIMATION */
-@keyframes fade {
+/* ANIMAÇÃO */
+@keyframes pop {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
 }
